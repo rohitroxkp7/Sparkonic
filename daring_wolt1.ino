@@ -71,7 +71,7 @@ void loop() {
   }
    else
    { 
-     Serial.print("No flame detected");
+     Serial.println("No flame detected");
     if(gas>85)
     { 
       if(val>0)
