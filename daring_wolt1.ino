@@ -76,7 +76,7 @@ void loop() {
     { 
       if(val>0)
       {
-        
+        Serial.println("Check gas stove regulators immediately");
         if((fsrForce-value)<0)
         {
           Serial.println("Gas leakage confirmed. Check gas stove regulators immediately");
