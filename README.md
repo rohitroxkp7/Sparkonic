@@ -28,3 +28,8 @@ The other case under temp sensor being off is gas sensor being on but potentiome
 is occurring although stove is off.
 
 So the three scenarios have been taken into consideration in this manner.
+Since the gas sensor detection is being checked only after checking temperature sensor being on, this logic above would alone 
+make the gas sensor dependent on the others. Hence, before all the checks, the gas sensor is checked first at the start.
+
+The last if else block is in case the stove is off but gas sensor malfunctions and does not detect anything, but a change in weight 
+means gas leakage. 
