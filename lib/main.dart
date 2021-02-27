@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audio_cache.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,6 +11,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  int a = 1; // 1 means leak, 2 means no leak.
+  String c = "30%";
+  String d = "No Alerts";
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,7 +28,7 @@ class _MyAppState extends State<MyApp> {
                   color: Colors.white,
                 )),
           ),
-          backgroundColor: Colors.blue[400],
+          backgroundColor: Colors.red[400],
         ),
         body: Stack(
           children: [
@@ -40,7 +44,7 @@ class _MyAppState extends State<MyApp> {
                             color: Colors.red,
                           )),
                       SizedBox(width: 10),
-                      Text('No ALerts',
+                      Text('$d',
                           style: TextStyle(
                             fontSize: 20,
                             color: Colors.green,
@@ -52,7 +56,7 @@ class _MyAppState extends State<MyApp> {
                 Card(
                   child: Row(
                     children: [
-                      Text('LPG Cylinder level: 30%',
+                      Text('LPG Cylinder level: $c',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -63,8 +67,41 @@ class _MyAppState extends State<MyApp> {
                 ),
               ],
             ),
-
-
+            Center(
+              child: FlatButton(
+                onPressed: () {
+                  setState(() {
+                    final player = AudioCache();
+                    if (a == 1) {
+                      player.play('TF026.WAV');
+                      d = "Leakage detected!";
+                    }
+                  });
+                },
+                child: Text('Refresh',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue[400],
+                    )),
+              ),
+            ),
+            Positioned(
+              top: 500,
+              child: FlatButton(
+                onPressed: () {
+                  setState(() {
+                    d = "No Alerts";
+                  });
+                },
+                child: Text('Reset',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue[400],
+                    )),
+              ),
+            ),
           ],
         ),
       ),
