@@ -33,3 +33,7 @@ make the gas sensor dependent on the others. Hence, before all the checks, the g
 
 The last if else block is in case the stove is off but gas sensor malfunctions and does not detect anything, but a change in weight 
 means gas leakage. 
+
+After the safety checks, the last part of the code [After displaying gas cylinder weight] checks the lpg gas weight to 
+help notify the user if it has gone below any threshold value.
+
