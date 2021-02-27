@@ -120,17 +120,6 @@ void loop() {
   delay(10000); // update sensors readings each ten seconds
 }
 
-/*
-The code starts off with taking data from all the sensors.
-First the temperature sensor is checked. If it is on, it means there is flame.
-If not, then no flame.
-
-Gas leak situations can be broadly of 3 types: 
-1. Gas leaks when stove is off and no flame is there. Could be from anywhere in the connections.
-2. Gas leaks when stove is kept on but no flame. [High chances, very high risk]
-3.Gas leaks when the stove is on. 
-  
- 
 
 
 
