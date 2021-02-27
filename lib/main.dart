@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
                   color: Colors.white,
                 )),
           ),
-          backgroundColor: Colors.red[400],
+          backgroundColor: Colors.blue[400],
         ),
         body: Stack(
           children: [
