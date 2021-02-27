@@ -89,7 +89,15 @@ void loop() {
     }
   }
  
-  
+   if(temp<=44)
+  {
+    if((fsrForce-value)<0)
+        {
+          Serial.println("Possible gas leakage detected");
+        }
+  }
+   
+   
   count=count+1;
   
   
