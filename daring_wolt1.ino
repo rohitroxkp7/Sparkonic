@@ -30,8 +30,8 @@ void loop() {
   // analog voltage reading ranges from about 0 to 1023 which maps to 0V to 5V (= 5000mV)
   fsrVoltage = map(fsrReading, 0, 1023, 0, 5000);
   if (fsrVoltage == 0) {
-      
-  } else {
+     Serial.println("no pressure");
+      } else {
     // The voltage = Vcc * R / (R + FSR) where R = 10K and Vcc = 5V
     // so FSR = ((Vcc - V) * R) / V        yay math!
     fsrResistance = 5000 - fsrVoltage;     // fsrVoltage is in millivolts so 5V = 5000mV
@@ -48,11 +48,81 @@ void loop() {
       fsrForce = fsrConductance - 1000;
       fsrForce /= 30;          
     }
+  if(count==0){
+    value=fsrForce+0;
+  }
+  
+  if(gas>85)
+  { Serial.println("Possible gas leak");}  /*In case other sensors fails,
+  this ensures at least giving a warning. 
+  */
+  
+  if(temp>44)
+  {
+    Serial.println("Flame on ");
+    if(gas>85)
+    {
+      Serial.println("Gas presence in atmosphere detected ");
+      if(val>0)
+      {
+        Serial.println("Flame on but gas presence in atmosphere detected. Switch off burners immediately");
+      }
+    }
+  }
+   else
+   { 
+     Serial.print("No flame detected");
+    if(gas>85)
+    { 
+      if(val>0)
+      {
+        
+        if((fsrForce-value)<0)
+        {
+          Serial.println("Gas leakage confirmed. Check gas stove regulators immediately");
+        }
+      }
+      else
+      {
+        Serial.println("Gas leakage detected");
+      }
+    }
+  }
+ 
+  
+  count=count+1;
   
   
+  
+  Serial.println("Weight of Cylinder: ");
+  Serial.println(fsrForce);
+  if((fsrForce-weight)<1&&(fsrForce-weight)>0)
+  {
+    Serial.println("Cylinder is getting empty. Book a new cylinder asap");
+  }
+  if((fsrForce-weight)==0)
+  {
+    Serial.println("Cylinder is empty. Book a new cylinder immediately");
+  }
+  
+  
+  
+  Serial.println();
+  value=fsrForce;
   delay(10000); // update sensors readings each ten seconds
 }
 
+/*
+The code starts off with taking data from all the sensors.
+First the temperature sensor is checked. If it is on, it means there is flame.
+If not, then no flame.
+
+Gas leak situations can be broadly of 3 types: 
+1. Gas leaks when stove is off and no flame is there. Could be from anywhere in the connections.
+2. Gas leaks when stove is kept on but no flame. [High chances, very high risk]
+3.Gas leaks when the stove is on. 
+  
+ 
 
 
 
