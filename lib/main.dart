@@ -11,9 +11,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  int a = 1; // 1 means leak, 2 means no leak.
-  String c = "30%";
+  int a = 2; // 1 means leak, 2 means no leak.
+  double c = 60;
   String d = "No Alerts";
+  String level;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -56,7 +57,7 @@ class _MyAppState extends State<MyApp> {
                 Card(
                   child: Row(
                     children: [
-                      Text('LPG Cylinder level: $c',
+                      Text('LPG Cylinder level: $c $level',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -76,6 +77,17 @@ class _MyAppState extends State<MyApp> {
                       player.play('TF026.WAV');
                       d = "Leakage detected!";
                     }
+                    if(c<=30){
+                      level="Low";
+                    }
+                    else if(c>30 && c<70)
+                      {
+                        level="Medium";
+                      }
+                    else
+                      {
+                        level="high";
+                      }
                   });
                 },
                 child: Text('Refresh',
