@@ -57,7 +57,7 @@ class _MyAppState extends State<MyApp> {
                 Card(
                   child: Row(
                     children: [
-                      Text('LPG Cylinder level: $c $level',
+                      Text('LPG Cylinder level: $c% $level',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
