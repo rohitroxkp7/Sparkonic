@@ -1,22 +1,26 @@
 float temp;
 int tempPin = 0;
 int gas = 0;
-int val = 0;
 int fsrPin = A2;     // the FSR and 10K pulldown are connected to A2
 int fsrReading;     // the analog reading from the FSR resistor divider
 int fsrVoltage;     // the analog reading converted to voltage
 unsigned long fsrResistance;  // The voltage converted to resistance
 unsigned long fsrConductance; 
 long fsrForce;       // Finally, the resistance converted to force
+int val = 0;
 int value = 0;
 unsigned long T;
 int count=0;
 float weight=1; //Empty cylinder weight in N
+
 void setup() {
-   Serial.begin(9600);
+  Serial.begin(9600);
+  pinMode(11,OUTPUT);
 }
 
 void loop() {
+   T=millis()/1000.0; //Start keeping a track of time since program started
+  //Temp Sensor:
    temp = analogRead(tempPin);
    // read analog volt from sensor and save to variable temp
    temp = temp * 0.48828125;
@@ -25,13 +29,16 @@ void loop() {
   gas  = analogRead(A1);
   //Rotary
   val = analogRead(A3);
-   //Pressure sensor:
+  
+  //Pressure sensor:
   fsrReading = analogRead(fsrPin); 
   // analog voltage reading ranges from about 0 to 1023 which maps to 0V to 5V (= 5000mV)
   fsrVoltage = map(fsrReading, 0, 1023, 0, 5000);
+ 
   if (fsrVoltage == 0) {
-     Serial.println("no pressure");
-      } else {
+    Serial.println("no pressure");
+      
+  } else {
     // The voltage = Vcc * R / (R + FSR) where R = 10K and Vcc = 5V
     // so FSR = ((Vcc - V) * R) / V        yay math!
     fsrResistance = 5000 - fsrVoltage;     // fsrVoltage is in millivolts so 5V = 5000mV
@@ -48,12 +55,16 @@ void loop() {
       fsrForce = fsrConductance - 1000;
       fsrForce /= 30;          
     }
+  
+  //LOGIC STARTS HERE
   if(count==0){
     value=fsrForce+0;
   }
   
   if(gas>85)
-  { Serial.println("Possible gas leak");}  /*In case other sensors fails,
+  { Serial.println("Possible gas leak");
+  	analogWrite(11, 1);
+  }  /*In case other sensors fails,
   this ensures at least giving a warning. 
   */
   
@@ -63,9 +74,11 @@ void loop() {
     if(gas>85)
     {
       Serial.println("Gas presence in atmosphere detected ");
+      analogWrite(11, 1);
       if(val>0)
       {
         Serial.println("Flame on but gas presence in atmosphere detected. Switch off burners immediately");
+        analogWrite(11, 1);
       }
     }
   }
@@ -80,6 +93,7 @@ void loop() {
         if((fsrForce-value)<0)
         {
           Serial.println("Gas leakage confirmed. Check gas stove regulators immediately");
+          analogWrite(11, 1);
         }
       }
       else
@@ -89,15 +103,16 @@ void loop() {
     }
   }
  
-   if(temp<=44)
+  
+  if(temp<=44)
   {
     if((fsrForce-value)<0)
         {
           Serial.println("Possible gas leakage detected");
+      analogWrite(11, 1);
         }
   }
-   
-   
+  
   count=count+1;
   
   
@@ -118,7 +133,14 @@ void loop() {
   Serial.println();
   value=fsrForce;
   delay(10000); // update sensors readings each ten seconds
+  analogWrite(11,0);
 }
+
+
+
+
+
+
 
 
 
